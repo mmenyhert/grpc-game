@@ -1,0 +1,99 @@
+//edition = "2023";
+/*
+option features.field_presence = IMPLICIT;
+option go_package = "google.golang.org/grpc/examples/route_guide/routeguide";
+option java_multiple_files = true;
+option java_package = "io.grpc.examples.routeguide";
+option java_outer_classname = "GameProto";
+*/
+syntax = "proto3";
+
+package game;
+
+service Game {
+    // Requests a new game with a specific size. The game is put in a database.
+    rpc NewGame(NewGameRequest) returns (NewGameReply) {}
+    rpc ShowAllSessions(ShowAllSessionsRequest) returns (stream SessionDetailsReply) {}
+
+    rpc GetCurrentSession(GetCurrentSessionRequest) returns (SessionDetailsReply) {}
+    rpc SetCurrentSession(SetCurrentSessionRequest) returns (SessionDetailsReply) {}
+    
+    rpc GetState(GetStateRequest) returns (GetStateReply) {}
+
+    rpc Step(StepRequest) returns (StepReply) {}
+
+    // Demonstratory function.
+    rpc SayHello(HelloRequest) returns (HelloReply) {}
+
+}
+
+// Empty class for defining a message that 
+// requests a new game instance.
+message NewGameRequest {
+    int32 size_x = 1;
+    int32 size_y = 2;
+
+    // probability of cells spawning.
+    float p = 3;
+}
+
+// Contains the map of the game
+message NewGameReply {
+    string data = 1;
+}
+
+// Example HelloRequest from the example code online.
+message HelloRequest {
+  string name = 1;
+}
+
+// // Example HelloReply from the example code online.
+message HelloReply {
+  string message = 1;
+}
+
+// Request for showing all available sessions
+message ShowAllSessionsRequest {
+}
+
+// Reply for showing all available sessions
+message SessionDetailsReply {
+  string session_id = 1;
+  string date = 2;
+  string metadata = 3;
+  int32 steps = 4;
+  string last = 5;
+}
+
+// Get request for the current session ID
+message GetCurrentSessionRequest {
+}
+
+// Set the current session ID
+message SetCurrentSessionRequest {
+  string session_id = 1;
+}
+
+// Get the state of the board for for a predetermined step
+// for the current session.
+// Accepts negative indexing.
+// E.g. The number -1 returns the last state
+message GetStateRequest {
+  int32 step = 1;
+}
+
+// Returns the state of the board for the current session for a predetermined step
+// defined in GetStateRequest.
+message GetStateReply {
+  string data = 1;
+}
+
+
+// Requests a step for the current session ID.
+message StepRequest {
+}
+
+// Reply for StepRequest. 
+// Can determine whether the request went through successfully.
+message StepReply {
+}
